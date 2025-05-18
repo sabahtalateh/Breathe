@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Exercise.order) private var exercises: [Exercise]
 
@@ -9,24 +10,32 @@ struct ContentView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(exercises) { exercise in
-                    Button {
-                        selectedExercise = exercise
-                    } label: {
-                        HStack {
-                            Circle()
-                                .frame(width: 40, height: 40)
-                            Text(exercise.title)
-                                .frame(maxWidth: .infinity, alignment: .leading)
+            ZStack {
+                Rectangle()
+                    .fill(.thinMaterial)
+                    .ignoresSafeArea()
+                
+                List {
+                    ForEach(exercises) { exercise in
+                        Button {
+                            selectedExercise = exercise
+                        } label: {
+                            HStack {
+                                Circle()
+                                    .frame(width: 50, height: 50)
+                                Text(exercise.title)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
                         }
+                        .buttonStyle(.plain)
+                        .listRowBackground(Color.clear)
                     }
-                    .buttonStyle(.plain)
+                    .onDelete(perform: deleteExercises)
                 }
-                .onDelete(perform: deleteExercises)
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
             }
             .navigationTitle("Exercises")
-            .listStyle(.plain)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
