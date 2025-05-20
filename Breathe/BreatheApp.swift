@@ -7,7 +7,15 @@ struct BreatheApp: App {
         let schema = Schema([
             Exercise.self,
         ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        
+        // Check if we're running UI tests with the clear exercises flag
+        let isUITestingWithClearExercises = ProcessInfo.processInfo.environment[TestConstants.clearExercises] == "1"
+        
+        // Use in-memory storage for UI tests to prevent persistence
+        let modelConfiguration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: isUITestingWithClearExercises
+        )
 
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])

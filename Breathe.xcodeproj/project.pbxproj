@@ -29,6 +29,16 @@
 		7382C93A2DD9EED0004A7935 /* BreatheUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BreatheUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		73508E7C2DDD0A6A002CE7C0 /* Exceptions for "BreatheUITests" folder in "Breathe" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				TestConstants.swift,
+			);
+			target = 7382C9202DD9EECC004A7935 /* Breathe */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7382C9232DD9EECD004A7935 /* Breathe */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -42,6 +52,9 @@
 		};
 		7382C93D2DD9EED0004A7935 /* BreatheUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				73508E7C2DDD0A6A002CE7C0 /* Exceptions for "BreatheUITests" folder in "Breathe" target */,
+			);
 			path = BreatheUITests;
 			sourceTree = "<group>";
 		};

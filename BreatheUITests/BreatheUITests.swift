@@ -17,8 +17,12 @@ final class BreatheUITests: XCTestCase {
 
     @MainActor
     func testExample() throws {
+        
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
+        
+        // Set the environment variable to clear exercises for UI tests
+        app.launchEnvironment[TestConstants.clearExercises] = "1"
         app.launch()
 
         // Use XCTAssert and related functions to verify your tests produce the correct results.
