@@ -37,13 +37,10 @@ struct ExerciseListView: View {
             .scrollContentBackground(.hidden)
             .navigationDestination(isPresented: $presentDestination, destination: {
                 if let exercise = selectedExercise {
-                    VStack {
-                        Text(exercise.id.uuidString)
-                        Text(exercise.title)
-                    }
-                    .onDisappear {
-                        selectedExercise = nil
-                    }
+                    ExerciseDetailView(exercise: exercise)
+                        .onDisappear {
+                            selectedExercise = nil
+                        }
                 } else {
                     Text("No Exercise Selected")
                 }

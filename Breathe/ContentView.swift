@@ -25,16 +25,6 @@ struct ContentView: View {
     }
 }
 
-struct ExerciseDetailView: View {
-    var exercise: Exercise
-
-    var body: some View {
-        Text("Exercise: \(exercise.title)")
-            .navigationTitle(exercise.title)
-            .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
 #Preview {
     ContentView()
         .modelContainer(for: Exercise.self, inMemory: true) { result in
