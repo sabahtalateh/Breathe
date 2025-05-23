@@ -4,17 +4,17 @@ import SwiftData
 @main
 struct BreatheApp: App {
     var sharedModelContainer: ModelContainer = {
+
         let schema = Schema([
             Exercise.self,
         ])
         
-        // Check if we're running UI tests with the clear exercises flag
-        let isUITestingWithClearExercises = ProcessInfo.processInfo.environment[TestConstants.clearExercises] == "1"
-        
         // Use in-memory storage for UI tests to prevent persistence
+        let isInMemory = CommandLine.arguments.contains(UITestFlags.inMemoryStorage)
+        
         let modelConfiguration = ModelConfiguration(
             schema: schema,
-            isStoredInMemoryOnly: isUITestingWithClearExercises
+            isStoredInMemoryOnly: isInMemory
         )
 
         do {

@@ -23,4 +23,4 @@ final class BreatheUITestsLaunchTests: XCTestCase {
         attachment.lifetime = .keepAlways
         add(attachment)
     }
-}
+} 

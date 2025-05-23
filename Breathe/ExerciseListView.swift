@@ -54,6 +54,7 @@ struct ExerciseListView: View {
                 Button(action: addExercise) {
                     Label("Add Exercise", systemImage: "plus")
                 }
+                .accessibilityIdentifier("Add Exercise")
                 .tint(.primary)
             }
             

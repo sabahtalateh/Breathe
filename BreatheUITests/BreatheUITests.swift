@@ -22,7 +22,6 @@ final class BreatheUITests: XCTestCase {
         let app = XCUIApplication()
         
         // Set the environment variable to clear exercises for UI tests
-        app.launchEnvironment[TestConstants.clearExercises] = "1"
         app.launch()
 
         // Use XCTAssert and related functions to verify your tests produce the correct results.

@@ -6,10 +6,12 @@ struct ContentView: View {
     @Query(sort: \Exercise.order) private var exercises: [Exercise]
 
     @State private var selectedExercise: Exercise?
+    
+    @State private var columnVisibility = NavigationSplitViewVisibility.doubleColumn
 
     var body: some View {
         VStack {
-            NavigationSplitView {
+            NavigationSplitView(columnVisibility: $columnVisibility) {
                 ExerciseListView(selectedExercise: $selectedExercise)
                     .navigationTitle("Exercises")
             } detail: {
@@ -20,6 +22,7 @@ struct ContentView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .navigationSplitViewStyle(.balanced)
             .tint(.white)
         }
     }

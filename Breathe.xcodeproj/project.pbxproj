@@ -33,7 +33,7 @@
 		73508E7C2DDD0A6A002CE7C0 /* Exceptions for "BreatheUITests" folder in "Breathe" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				TestConstants.swift,
+				UITestsConstants.swift,
 			);
 			target = 7382C9202DD9EECC004A7935 /* Breathe */;
 		};
