@@ -29,14 +29,8 @@ struct CustomTrackView: View {
                     )
                     .id(step.id)
                 }
-                .onDelete { indexSet in
-                    for index in indexSet {
-                        modelContext.delete(steps[index])
-                    }
-                }
-                .onMove { fromOffsets, toOffset in
-                    moveSteps(from: fromOffsets, to: toOffset)
-                }
+                .onDelete(perform: deleteSteps)
+                .onMove(perform: moveSteps)
             }
         } header: {
             Text("Breathing Cycles")
@@ -44,37 +38,21 @@ struct CustomTrackView: View {
     }
     
     private func moveSteps(from source: IndexSet, to destination: Int) {
-        // Create a temporary array for moving items
-//        var stepsArray = steps.map { step in step }
+
+        var mutableSteps = steps
         
-        // Perform the move operation in the array
-//        stepsArray.move(fromOffsets: source, toOffset: destination)
+        mutableSteps.move(fromOffsets: source, toOffset: destination)
         
-        // Update the order in the database
-//        for (index, step) in stepsArray.enumerated() {
-//            step.order = index
-//        }
+        for (index, step) in mutableSteps.enumerated() {
+            step.order = index
+        }
         
-        // Save changes
-//        try? modelContext.save()
-        
-        // Создаем временный массив, отражающий порядок после перемещения
-            var stepsArray = steps.map { step in step }
-            stepsArray.move(fromOffsets: source, toOffset: destination)
-            
-            // Просто обновляем все порядковые номера последовательно
-            for (index, step) in stepsArray.enumerated() {
-                step.order = index
-            }
-            
-            // Сохраняем изменения
-            try? modelContext.save()
+        // try? modelContext.save() (???)
     }
     
-    private func deleteSteps(at offsets: IndexSet) {
-        let stepsToDelete = offsets.map { offset in steps[offset] }
-        for step in stepsToDelete {
-            modelContext.delete(step)
+    private func deleteSteps(at indexSet: IndexSet) {
+        for index in indexSet {
+            modelContext.delete(steps[index])
         }
     }
 }
@@ -93,30 +71,30 @@ struct StepEditor: View {
                     value: $step.in
                 )
                 
-//                CustomStepper(
-//                    label: phaseTitles[.inHold]!,
-//                    icon: phaseIcons[.inHold]!,
-//                    in: 0...99,
-//                    value: $step.inHold,
-//                    dimLowest: true,
-//                    replaceValues: [0: Image(systemName: "forward.fill")]
-//                )
-//                
-//                CustomStepper(
-//                    label: phaseTitles[.out]!,
-//                    icon: phaseIcons[.out]!,
-//                    in: 1...99,
-//                    value: $step.out
-//                )
-//                
-//                CustomStepper(
-//                    label: phaseTitles[.outHold]!,
-//                    icon: phaseIcons[.outHold]!,
-//                    in: 0...99,
-//                    value: $step.outHold,
-//                    dimLowest: true,
-//                    replaceValues: [0: Image(systemName: "forward.fill")]
-//                )
+                CustomStepper(
+                    label: phaseTitles[.inHold]!,
+                    icon: phaseIcons[.inHold]!,
+                    in: 0...99,
+                    value: $step.inHold,
+                    dimLowest: true,
+                    replaceValues: [0: Image(systemName: "forward.fill")]
+                )
+                
+                CustomStepper(
+                    label: phaseTitles[.out]!,
+                    icon: phaseIcons[.out]!,
+                    in: 1...99,
+                    value: $step.out
+                )
+                
+                CustomStepper(
+                    label: phaseTitles[.outHold]!,
+                    icon: phaseIcons[.outHold]!,
+                    in: 0...99,
+                    value: $step.outHold,
+                    dimLowest: true,
+                    replaceValues: [0: Image(systemName: "forward.fill")]
+                )
             } header: {
                 Text("Breathing Cycle \(step.order + 1)")
                     .font(.subheadline)

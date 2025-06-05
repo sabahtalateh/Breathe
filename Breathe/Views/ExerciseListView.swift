@@ -36,9 +36,7 @@ struct ExerciseListView: View {
                         .id(exercise.id)
                     }
                     .onDelete(perform: deleteExercises)
-                    .onMove { IndexSet, Int in
-                        
-                    }
+                    .onMove(perform: moveExercises)
                 }
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
@@ -96,6 +94,19 @@ struct ExerciseListView: View {
         for index in offsets {
             modelContext.delete(exercises[index])
         }
+    }
+    
+    private func moveExercises(from source: IndexSet, to destination: Int) {
+
+        var mutableExercises = exercises
+        
+        mutableExercises.move(fromOffsets: source, toOffset: destination)
+        
+        for (index, exercise) in mutableExercises.enumerated() {
+            exercise.order = index
+        }
+        
+        // try? modelContext.save() (???)
     }
 }
 
