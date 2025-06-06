@@ -3,10 +3,11 @@ import SwiftData
 
 struct CustomTrackView: View {
     
-    @Bindable var customTrack: CustomTrack
-    
     @Environment(\.modelContext) private var modelContext
+    
     @Query private var steps: [CustomTrackStep]
+    
+    @Bindable var customTrack: CustomTrack
     
     var scroller: ScrollViewProxy
     
@@ -37,8 +38,9 @@ struct CustomTrackView: View {
         }
     }
     
+    
     private func moveSteps(from source: IndexSet, to destination: Int) {
-
+        
         var mutableSteps = steps
         
         mutableSteps.move(fromOffsets: source, toOffset: destination)
@@ -47,23 +49,32 @@ struct CustomTrackView: View {
             step.order = index
         }
         
-        // try? modelContext.save() (???)
+        try? modelContext.save()
     }
     
     private func deleteSteps(at indexSet: IndexSet) {
+        
         for index in indexSet {
             modelContext.delete(steps[index])
         }
+        
+        try? modelContext.save()
+        
+        for (index, step) in steps.enumerated() {
+            step.order = index
+        }
     }
+    
 }
 
 struct StepEditor: View {
+    
     @Bindable var step: CustomTrackStep
-    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         VStack {
             Section {
+                
                 CustomStepper(
                     label: phaseTitles[.in]!,
                     icon: phaseIcons[.in]!,
@@ -95,6 +106,7 @@ struct StepEditor: View {
                     dimLowest: true,
                     replaceValues: [0: Image(systemName: "forward.fill")]
                 )
+                
             } header: {
                 Text("Breathing Cycle \(step.order + 1)")
                     .font(.subheadline)

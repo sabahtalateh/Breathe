@@ -1,9 +1,13 @@
 import SwiftUI
+import SwiftData
 
 struct ExerciseDetailView: View {
     
     @Environment(\.modelContext) private var modelContext
+    
     @Bindable var exercise: Exercise
+    
+    @State private var isEditing: Bool = false
     
     var body: some View {
         ScrollViewReader { scroller in
@@ -33,13 +37,25 @@ struct ExerciseDetailView: View {
                 if exercise.track == .custom {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
+                            withAnimation { isEditing.toggle() }
+                        } label: {
+                            Image(systemName: isEditing ? "checkmark" : "pencil")
+                                .contentTransition(.symbolEffect(.replace))
+                        }
+                        .accessibilityIdentifier("Edit Custom Track Steps")
+                    }
+                    
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
                             addCustomTrackStep(scroller: scroller)
                         } label: {
                             Label("Add", systemImage: "plus")
                         }
+                        .accessibilityIdentifier("Add Custom Track Step")
                     }
                 }
             }
+            .environment(\.editMode, .constant(isEditing ? .active : .inactive))
         }
     }
     
@@ -49,7 +65,7 @@ struct ExerciseDetailView: View {
         // Create a new step with the next order number
         let newStep = CustomTrackStep(
             track: track,
-            order: track.steps.count,
+            order: getCustomTrackStepsCount(),
             in: 1, inHold: 0, out: 1, outHold: 0
         )
         
@@ -63,6 +79,21 @@ struct ExerciseDetailView: View {
             withAnimation {
                 scroller.scrollTo(newStep.id, anchor: .bottom)
             }
+        }
+    }
+    
+    func getCustomTrackStepsCount() -> Int {
+        do {
+            // !! It is required to put id to local variable so #Predicate to work
+            let trackID = exercise.customTrack.id
+            let predicate = #Predicate<CustomTrackStep> { step in step.track.id == trackID }
+            let descriptor = FetchDescriptor<CustomTrackStep>(predicate: predicate)
+            
+            return try modelContext.fetchCount(descriptor)
+        } catch {
+            // TODO: do something with error
+            print("Error fetching steps count: \(error)")
+            return 0
         }
     }
 }

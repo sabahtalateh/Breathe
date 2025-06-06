@@ -4,13 +4,17 @@ import SwiftData
 struct ExerciseListView: View {
     
     @Environment(\.modelContext) private var modelContext
+    
     @Query(sort: \Exercise.order) private var exercises: [Exercise]
     
     @Binding var selectedExercise: Exercise?
     
     @State private var presentDestination: Bool = false
     
+    @State private var isEditing: Bool = false
+    
     var body: some View {
+        
         ZStack {
             
             // Material background
@@ -40,6 +44,7 @@ struct ExerciseListView: View {
                 }
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
+                .environment(\.editMode, .constant(isEditing ? .active : .inactive))
                 .navigationDestination(isPresented: $presentDestination, destination: {
                     if let exercise = selectedExercise {
                         ExerciseDetailView(exercise: exercise)
@@ -51,6 +56,19 @@ struct ExerciseListView: View {
                     }
                 })
                 .toolbar {
+                    
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            withAnimation {
+                                isEditing.toggle()
+                            }
+                        } label: {
+                            Image(systemName: isEditing ? "checkmark" : "pencil")
+                                .contentTransition(.symbolEffect(.replace))
+                        }
+                        .accessibilityIdentifier("Edit Exercises")
+                    }
+                    
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
                             addExercise(scroller: scroller)
@@ -58,7 +76,6 @@ struct ExerciseListView: View {
                             Label("Add Exercise", systemImage: "plus")
                         }
                         .accessibilityIdentifier("Add Exercise")
-                        .tint(.primary)
                     }
                 }
             }
