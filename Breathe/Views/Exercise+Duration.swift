@@ -35,11 +35,8 @@ extension DynamicTrack {
         
         var totalDuration = currentIn + currentInHold + currentOut + currentOutHold
         
-        let lim = self.limit
-        let inidd = self.initialDynamicDuration
-        let diff = (lim - inidd)
+        let diff = self.limit - self.initialDynamicDuration
         let extraCycle = diff % add != 0
-        
         let cycleCount: Int
         if extraCycle {
             cycleCount = diff / add + 1
