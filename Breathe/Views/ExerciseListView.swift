@@ -85,7 +85,7 @@ struct ExerciseListView: View {
     
     private func addExercise(scroller: ScrollViewProxy) {
         let maxOrder = exercises.map(\.order).max() ?? -1
-        let new = Presets.exercises.defaultConstant(order: 0, title: "Test Exercise")
+        let new = Presets.exercises.defaultConstant(order: maxOrder + 1, title: "Test Exercise")
         
         withAnimation {
             modelContext.insert(new)
