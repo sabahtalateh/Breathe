@@ -11,14 +11,22 @@ struct ContentView: View {
     
     @State private var editCustomTrack: Bool = false
     
+    @State private var showPlayer = false
+    
     var body: some View {
         VStack {
             NavigationSplitView(columnVisibility: $columnVisibility) {
-                ExerciseListView(selectedExercise: $selectedExercise)
-                    .navigationTitle("Exercises")
+                ExerciseListView(
+                    selectedExercise: $selectedExercise,
+                    showPlayer: $showPlayer
+                )
+                .navigationTitle("Exercises")
             } detail: {
                 if let exercise = selectedExercise {
-                    ExerciseDetailView(exercise: exercise)
+                    ExerciseDetailView(
+                        exercise: exercise,
+                        showPlayer: $showPlayer
+                    )
                 } else {
                     Text("Select an exercise")
                         .foregroundStyle(.secondary)
@@ -26,6 +34,11 @@ struct ContentView: View {
             }
             .navigationSplitViewStyle(.balanced)
             .tint(.primary)
+        }
+        .fullScreenCover(isPresented: $showPlayer) {
+            if let exercise = selectedExercise {
+                ExercisePlayerView(exercise: exercise, isPresented: $showPlayer)
+            }
         }
     }
 }

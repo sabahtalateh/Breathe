@@ -9,6 +9,8 @@ struct ExerciseListView: View {
     
     @Binding var selectedExercise: Exercise?
     
+    @Binding var showPlayer: Bool
+    
     @State private var presentDestination: Bool = false
     
     @State private var isEditing: Bool = false
@@ -47,7 +49,10 @@ struct ExerciseListView: View {
                 .environment(\.editMode, .constant(isEditing ? .active : .inactive))
                 .navigationDestination(isPresented: $presentDestination, destination: {
                     if let exercise = selectedExercise {
-                        ExerciseDetailView(exercise: exercise)
+                        ExerciseDetailView(
+                            exercise: exercise,
+                            showPlayer: $showPlayer
+                        )
                             .onDisappear {
                                 selectedExercise = nil
                             }
@@ -92,6 +97,7 @@ struct ExerciseListView: View {
             try? modelContext.save()
         }
         
+        // Scroll not works without explicit waiting
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
             withAnimation {
                 scroller.scrollTo(new.id, anchor: .bottom)
@@ -121,7 +127,10 @@ struct ExerciseListView: View {
 
 #Preview {
     NavigationStack {
-        ExerciseListView(selectedExercise: .constant(nil))
+        ExerciseListView(
+            selectedExercise: .constant(nil),
+            showPlayer: .constant(false)
+        )
         .modelContainer(for: Exercise.self, inMemory: true) { result in
             if case let .success(container) = result {
                 let context = container.mainContext

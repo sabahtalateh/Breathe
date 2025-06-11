@@ -6,13 +6,17 @@ struct ExerciseDetailView: View {
     @Environment(\.modelContext) private var modelContext
     
     @Bindable var exercise: Exercise
+    @Binding var showPlayer: Bool
     
     @State private var isEditing: Bool = false
     
     var body: some View {
         ScrollViewReader { scroller in
             Form {
-                StartExerciseView(exercise: exercise)
+                StartExerciseView(
+                    exercise: exercise,
+                    showPlayer: $showPlayer
+                )
                 
                 ExerciseTitleView(title: $exercise.title)
                 
@@ -103,7 +107,8 @@ struct ExerciseDetailView: View {
 #Preview {
     NavigationStack {
         ExerciseDetailView(
-            exercise: Presets.exercises.defaultConstant(order: 0, title: "Test Exercise")
+            exercise: Presets.exercises.defaultConstant(order: 0, title: "Test Exercise"),
+            showPlayer: .constant(false)
         )
         .modelContainer(for: Exercise.self, inMemory: true)
         .tint(.primary)

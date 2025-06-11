@@ -4,6 +4,8 @@ struct StartExerciseView: View {
     
     let exercise: Exercise
     
+    @Binding var showPlayer: Bool
+    
     var exerciseDuration: Text {
         switch exercise.track {
         case .constant:
@@ -27,9 +29,8 @@ struct StartExerciseView: View {
             HStack {
                 Spacer()
                 
-                
                 Button {
-                    // playStore.showPlayView(e)
+                    showPlayer = true
                 } label: {
                     ZStack {
                         Circle()
@@ -69,8 +70,11 @@ struct StartExerciseView: View {
 
 #Preview {
     Form {
-        StartExerciseView(exercise: Presets.exercises.defaultConstant(order: 0, title: "Test Exercise"))
-        .preferredColorScheme(.dark)
+        StartExerciseView(
+            exercise: Presets.exercises.defaultConstant(order: 0, title: "Test Exercise"),
+            showPlayer: .constant(false)
+        )
+            .preferredColorScheme(.dark)
     }
     .tint(.primary)
     

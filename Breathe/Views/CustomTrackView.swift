@@ -120,7 +120,8 @@ struct StepEditor: View {
 #Preview {
     NavigationStack {
         ExerciseDetailView(
-            exercise: Presets.exercises.defaultConstant(order: 0, title: "Test Exercise")
+            exercise: Presets.exercises.defaultConstant(order: 0, title: "Test Exercise"),
+            showPlayer: .constant(false)
         )
         .modelContainer(for: Exercise.self, inMemory: true)
         .tint(.primary)
