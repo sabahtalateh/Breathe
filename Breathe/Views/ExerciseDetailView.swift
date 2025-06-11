@@ -12,7 +12,7 @@ struct ExerciseDetailView: View {
     var body: some View {
         ScrollViewReader { scroller in
             Form {
-                StartExerciseView()
+                StartExerciseView(exercise: exercise)
                 
                 ExerciseTitleView(title: $exercise.title)
                 
@@ -103,15 +103,7 @@ struct ExerciseDetailView: View {
 #Preview {
     NavigationStack {
         ExerciseDetailView(
-            exercise: Exercise(
-                order: 1,
-                title: "Test Exercise",
-                track: .constant,
-                constantTrack: Presets.constantTracks.default(),
-                increasingTrack: Presets.dynamicTracks.defaultIncreasing(),
-                decreasingTrack: Presets.dynamicTracks.defaultDecreasing(),
-                customTrack: Presets.customTracks.default()
-            )
+            exercise: Presets.exercises.defaultConstant(order: 0, title: "Test Exercise")
         )
         .modelContainer(for: Exercise.self, inMemory: true)
         .tint(.primary)

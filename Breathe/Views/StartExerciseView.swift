@@ -2,14 +2,23 @@ import SwiftUI
 
 struct StartExerciseView: View {
     
+    let exercise: Exercise
+    
     var exerciseDuration: Text {
-        //            switch detailStore.exercise.duration {
-        //            case .infinity:
-        //                Text("\(Image(systemName: "infinity"))")
-        //            case .seconds(let val):
-        //                Text("\(formatSeconds(val))")
-        //            }
-        Text("10:20")
+        switch exercise.track {
+        case .constant:
+            if exercise.constantTrack.isInfinite {
+                Text("\(Image(systemName: "infinity"))")
+            } else {
+                Text("\(formatSeconds(exercise.constantTrack.duration))")
+            }
+        case .increasing:
+            Text("\(formatSeconds(exercise.increasingTrack.duration))")
+        case .decreasing:
+            Text("\(formatSeconds(exercise.decreasingTrack.duration))")
+        case .custom:
+            Text("\(formatSeconds(exercise.customTrack.duration))")
+        }
     }
     
     var body: some View {
@@ -60,8 +69,8 @@ struct StartExerciseView: View {
 
 #Preview {
     Form {
-        StartExerciseView()
-            .preferredColorScheme(.dark)
+        StartExerciseView(exercise: Presets.exercises.defaultConstant(order: 0, title: "Test Exercise"))
+        .preferredColorScheme(.dark)
     }
     .tint(.primary)
     
