@@ -57,9 +57,9 @@ struct ExerciseListView: View {
                             exercise: exercise,
                             showPlayer: $showPlayer
                         )
-                            .onDisappear {
-                                selectedExercise = nil
-                            }
+                        .onDisappear {
+                            selectedExercise = nil
+                        }
                     } else {
                         Text("No Exercise Selected")
                     }
@@ -94,7 +94,7 @@ struct ExerciseListView: View {
     
     private func addExercise(scroller: ScrollViewProxy) {
         let maxOrder = exercises.map(\.order).max() ?? -1
-        let new = Presets.exercises.defaultConstant(order: maxOrder + 1, title: "Test Exercise")
+        let new = Presets.exercises.defaultConstant(order: maxOrder + 1, title: generateExerciseTitle())
         
         withAnimation {
             modelContext.insert(new)
@@ -116,7 +116,7 @@ struct ExerciseListView: View {
     }
     
     private func moveExercises(from source: IndexSet, to destination: Int) {
-
+        
         var mutableExercises = exercises
         
         mutableExercises.move(fromOffsets: source, toOffset: destination)
@@ -126,6 +126,40 @@ struct ExerciseListView: View {
         }
         
         // try? modelContext.save() (???)
+    }
+    
+    private func generateExerciseTitle() -> String {
+        let prefix = "New Exercise"
+        
+        // Get all existing titles that start with prefix
+        let existingTitles = exercises.map { exercise in exercise.title }
+        let newExerciseTitles = existingTitles.filter { title in title.hasPrefix(prefix) }
+        
+        // If no "New Exercise" titles exist, return "New Exercise"
+        if newExerciseTitles.isEmpty {
+            return prefix
+        }
+        
+        // Extract numbers from existing titles
+        var existingNumbers: [Int] = []
+        for title in newExerciseTitles {
+            if title == prefix {
+                // "New Exercise" without number = 1
+                existingNumbers.append(1)
+            } else if title.hasPrefix("\(prefix) ") {
+                // Remove "New Exercise " prefix and try to parse the number
+                let numberPart = title.trimmingPrefix("\(prefix) ")
+                if let number = Int(numberPart) {
+                    existingNumbers.append(number)
+                }
+            }
+        }
+        
+        // Find the next available number
+        let maxNumber = existingNumbers.max() ?? 0
+        let nextNumber = maxNumber + 1
+        
+        return "\(prefix) \(nextNumber)"
     }
 }
 
