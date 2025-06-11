@@ -38,7 +38,11 @@ struct ExerciseListView: View {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
-                        .listRowBackground(Color.clear)
+                        .listRowBackground(
+                            Color(selectedExercise == exercise ? .black : .clear)
+                                .opacity(0.5)
+                                .animation(.easeOut(duration: 0.18))
+                        )
                         .id(exercise.id)
                     }
                     .onDelete(perform: deleteExercises)
